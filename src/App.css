@@ -13,22 +13,8 @@
   font-size: 1.5em;
 }
 
-.pics {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.pic {
-  width: 50%;
-  height: 10%;
-}
-
-.pic-2 {
-  transform: rotate(90deg);
-}
-
-#pic-2-div {
-  margin-top: 100;
+@media screen and (min-width: 992px) {
+  .carousel {
+    width: 50%;
+  }
 }

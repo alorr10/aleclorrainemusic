@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import Imperfectly from './Sounds/Imperfectly.m4a';
+import { Button } from 'react-bootstrap';
 class MusicPlayer extends Component {
   state = {
     playing: false,
@@ -14,7 +15,7 @@ class MusicPlayer extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.onClick}>{this.state.playing ? 'Stop' : 'Play'}</button>
+        <Button onClick={this.onClick}>{this.state.playing ? 'Stop' : 'Play Imperfectly'}</Button>
         <ReactPlayer url={Imperfectly} playing={this.state.playing} />
       </div>
     );

@@ -8,7 +8,9 @@ class App extends Component {
       <Container fluid>
         <Jumbotron>
           <h1>Alec Lorraine Music</h1>
-          <MusicPlayer />
+          <div className="ml-3">
+            <MusicPlayer />
+          </div>
         </Jumbotron>
       </Container>
     );

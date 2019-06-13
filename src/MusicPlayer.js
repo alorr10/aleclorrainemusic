@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player';
 import Imperfectly from './Sounds/Imperfectly.m4a';
 import GayForTheWeekend from './Sounds/GayForTheWeekend.mp3';
 import MelatoninDreams from './Sounds/MelatoninDreams.mp3';
+import CarolineMoana from './Sounds/CarolineMoana.mp3';
 import { Row, Col, Button } from 'react-bootstrap';
 class MusicPlayer extends Component {
   state = {
@@ -35,6 +36,13 @@ class MusicPlayer extends Component {
           activeSongName: 'MelatoninDreams',
         }));
         break;
+      case 'CarolineMoana':
+        this.setState(prevState => ({
+          playing: !prevState.playing,
+          activeSong: CarolineMoana,
+          activeSongName: 'CarolineMoana',
+        }));
+        break;
     }
   };
 
@@ -52,9 +60,16 @@ class MusicPlayer extends Component {
             {playing && activeSongName === 'GayForTheWeekend' ? 'Stop' : 'Play Gay For The Weekend'}
           </Button>
         </Row>
-        <Row>
+        <Row className="mb-3">
           <Button onClick={() => this.onClick('MelatoninDreams')}>
             {playing && activeSongName === 'MelatoninDreams' ? 'Stop' : 'Play Melatonin Dreams'}
+          </Button>
+        </Row>
+        <Row className="mb-3">
+          <Button onClick={() => this.onClick('CarolineMoana')}>
+            {playing && activeSongName === 'CarolineMoana'
+              ? 'Stop'
+              : "Play Caroline's Birthday Song"}
           </Button>
         </Row>
         <ReactPlayer url={activeSong} playing={this.state.playing} />

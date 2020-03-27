@@ -1,81 +1,54 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
-import Imperfectly from './Sounds/Imperfectly.m4a';
-import GayForTheWeekend from './Sounds/GayForTheWeekend.mp3';
-import MelatoninDreams from './Sounds/MelatoninDreams.mp3';
-import CarolineMoana from './Sounds/CarolineMoana.mp3';
+
+import {
+  Imperfectly,
+  GayForTheWeekend,
+  MelatoninDreams,
+  CarolineMoana,
+  Quarantine,
+  QuarantineMusicVideo,
+} from './Sounds';
 import { Row, Col, Button } from 'react-bootstrap';
-class MusicPlayer extends Component {
-  state = {
-    playing: false,
-    activeSong: Imperfectly,
-    activeSongName: 'Imperfectly',
-  };
 
-  onClick = title => {
-    if (this.state.playing) return this.setState({ playing: false });
-    switch (title) {
-      case 'Imperfectly':
-        this.setState(prevState => ({
-          playing: !prevState.playing,
-          activeSong: Imperfectly,
-          activeSongName: 'Imperfectly',
-        }));
-        break;
-      case 'GayForTheWeekend':
-        this.setState(prevState => ({
-          playing: !prevState.playing,
-          activeSong: GayForTheWeekend,
-          activeSongName: 'GayForTheWeekend',
-        }));
-        break;
-      case 'MelatoninDreams':
-        this.setState(prevState => ({
-          playing: !prevState.playing,
-          activeSong: MelatoninDreams,
-          activeSongName: 'MelatoninDreams',
-        }));
-        break;
-      case 'CarolineMoana':
-        this.setState(prevState => ({
-          playing: !prevState.playing,
-          activeSong: CarolineMoana,
-          activeSongName: 'CarolineMoana',
-        }));
-        break;
-    }
-  };
+const songs = [
+  { title: 'Imperfectly', file: Imperfectly },
+  { title: 'Gay For The Weekend', file: GayForTheWeekend },
+  { title: 'Melatonin Dreams', file: MelatoninDreams },
+  { title: 'Caroline Moana', file: CarolineMoana },
+  { title: 'Quarantine', file: Quarantine },
+  { title: 'Quarantine Music Video', file: QuarantineMusicVideo },
+];
 
-  render() {
-    const { playing, activeSong, activeSongName } = this.state;
-    return (
-      <div>
+function MusicPlayer() {
+  const [playing, setPlaying] = useState(false);
+  const [activeSong, setActiveSong] = useState(null);
+
+  const onClick = song => {
+    if (playing) return setPlaying(false);
+    setPlaying(prev => !prev.playing);
+    setActiveSong(song);
+  };
+  //
+  return (
+    <div>
+      {songs.map(song => (
         <Row className="mb-3">
-          <Button onClick={() => this.onClick('Imperfectly')}>
-            {playing && activeSongName === 'Imperfectly' ? 'Stop' : 'Play Imperfectly'}
+          <Button
+            onClick={() => onClick(song)}
+            disabled={playing && activeSong.title !== song.title && !!activeSong}
+          >
+            {playing && activeSong.title === song.title ? 'Pause' : `Play ${song.title}`}
           </Button>
         </Row>
-        <Row className="mb-3">
-          <Button onClick={() => this.onClick('GayForTheWeekend')}>
-            {playing && activeSongName === 'GayForTheWeekend' ? 'Stop' : 'Play Gay For The Weekend'}
-          </Button>
-        </Row>
-        <Row className="mb-3">
-          <Button onClick={() => this.onClick('MelatoninDreams')}>
-            {playing && activeSongName === 'MelatoninDreams' ? 'Stop' : 'Play Melatonin Dreams'}
-          </Button>
-        </Row>
-        <Row className="mb-3">
-          <Button onClick={() => this.onClick('CarolineMoana')}>
-            {playing && activeSongName === 'CarolineMoana'
-              ? 'Stop'
-              : "Play Caroline's Birthday Song"}
-          </Button>
-        </Row>
-        <ReactPlayer url={activeSong} playing={this.state.playing} />
-      </div>
-    );
-  }
+      ))}
+      <ReactPlayer
+        url={activeSong ? activeSong.file : Imperfectly}
+        playing={playing}
+        controls={activeSong ? activeSong.title == 'Quarantine Music Video' : false}
+      />
+    </div>
+  );
 }
 
 export default MusicPlayer;

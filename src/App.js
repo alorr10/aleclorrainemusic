@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import MusicPlayer from './MusicPlayer';
 import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
+import { withCookies, Cookies } from 'react-cookie';
+
 class App extends Component {
+  componentDidMount() {
+    console.log('here;', this.props);
+  }
   render() {
     return (
       <Container fluid>
@@ -17,4 +22,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withCookies(App);

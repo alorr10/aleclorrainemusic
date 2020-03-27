@@ -12,12 +12,12 @@ import {
 import { Row, Col, Button } from 'react-bootstrap';
 
 const songs = [
+  { title: 'Quarantine Music Video', file: QuarantineMusicVideo },
   { title: 'Imperfectly', file: Imperfectly },
   { title: 'Gay For The Weekend', file: GayForTheWeekend },
   { title: 'Melatonin Dreams', file: MelatoninDreams },
   { title: 'Caroline Moana', file: CarolineMoana },
   { title: 'Quarantine', file: Quarantine },
-  { title: 'Quarantine Music Video', file: QuarantineMusicVideo },
 ];
 
 function MusicPlayer() {
@@ -37,6 +37,8 @@ function MusicPlayer() {
           <Button
             onClick={() => onClick(song)}
             disabled={playing && activeSong.title !== song.title && !!activeSong}
+            variant={song.title == 'Quarantine Music Video' ? 'primary' : 'info'}
+            style={song.title == 'Quarantine Music Video' ? { height: 80 } : {}}
           >
             {playing && activeSong.title === song.title ? 'Pause' : `Play ${song.title}`}
           </Button>

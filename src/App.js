@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
-import './App.css';
-import MusicPlayer from './MusicPlayer';
-import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
-import { withCookies, Cookies } from 'react-cookie';
+import React, { Component } from "react";
+import "./App.css";
+import MusicPlayer from "./MusicPlayer";
+import { Container } from "react-bootstrap";
 
 class App extends Component {
-  componentDidMount() {
-    console.log('here;', this.props);
-  }
   render() {
     return (
       <Container fluid>
-        <Jumbotron>
+        <div className="p-5">
           <h1>Alec Lorraine Music</h1>
-          <div className="ml-3">
+          <div className="ms-3">
             <MusicPlayer />
           </div>
-        </Jumbotron>
+        </div>
       </Container>
     );
   }
 }
 
-export default withCookies(App);
+export default App;

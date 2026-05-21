@@ -1,18 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import { CookiesProvider } from 'react-cookie';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
+import App from "./App";
 
-navigator.serviceWorker.getRegistrations().then(function(registrations) {
+navigator.serviceWorker.getRegistrations().then(function (registrations) {
   for (let registration of registrations) {
     registration.unregister();
   }
 });
 
-ReactDOM.render(
-  <CookiesProvider>
-    <App />
-  </CookiesProvider>,
-  document.getElementById('root')
-);
+createRoot(document.getElementById("root")).render(<App />);

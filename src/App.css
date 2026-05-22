@@ -3,15 +3,23 @@
   --pink: #ff3cac;
   --white: #ffffff;
   --white-dim: rgba(255, 255, 255, 0.65);
+  --card-size: min(420px, 85vw);
 }
 
 /* === APP SHELL === */
 
-.app {
-  min-height: 100vh;
+.app-bg {
+  position: fixed;
+  inset: 0;
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
 }
 
 .app-overlay {
@@ -96,6 +104,7 @@
   width: 100%;
   padding: 24px 0 48px !important;
   overflow: visible !important;
+  --swiper-navigation-size: 14px;
 }
 
 .song-swiper .swiper-wrapper {
@@ -104,15 +113,15 @@
 }
 
 .song-slide {
-  width: 420px !important;
-  height: 420px !important;
+  width: var(--card-size) !important;
+  height: var(--card-size) !important;
 }
 
 /* === SONG CARD === */
 
 .song-card {
-  width: 420px;
-  height: 420px;
+  width: var(--card-size);
+  height: var(--card-size);
   border-radius: 18px;
   overflow: hidden;
   position: relative;
@@ -217,12 +226,13 @@
 }
 
 .play-btn.playing {
-  background: rgba(255, 255, 255, 0.28);
+  background: transparent;
+  box-shadow: none;
 }
 
 .play-btn:hover {
   transform: scale(1.08);
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .play-btn svg {
@@ -306,18 +316,18 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-radius: 50%;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   transition: background 0.2s;
   top: 50%;
 }
 
 .song-swiper .swiper-button-prev {
-  left: max(80px, calc(50% - 280px));
+  left: max(8px, calc(50% - var(--card-size) / 2 - 52px));
 }
 
 .song-swiper .swiper-button-next {
-  right: max(80px, calc(50% - 280px));
+  right: max(8px, calc(50% - var(--card-size) / 2 - 52px));
 }
 
 .song-swiper .swiper-button-prev:hover,
@@ -327,7 +337,7 @@
 
 .song-swiper .swiper-button-prev::after,
 .song-swiper .swiper-button-next::after {
-  font-size: 18px;
+  font-size: 14px !important;
   font-weight: 900;
 }
 

@@ -84,6 +84,7 @@ const PauseIcon = () => (
 
 export default function MusicPlayer() {
   const [activeIndex, setActiveIndex] = useState(4);
+  const [playingIndex, setPlayingIndex] = useState(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -91,16 +92,6 @@ export default function MusicPlayer() {
   const [morePlaying, setMorePlaying] = useState(null);
   const audioRef = useRef(null);
   const swiperRef = useRef(null);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.src = SONGS[activeIndex].file;
-    audio.load();
-    setPlaying(false);
-    setCurrentTime(0);
-    setDuration(0);
-  }, [activeIndex]);
 
   // Navigate side slides via document-level click, bypassing 3D hit-test issues with loop clones
   useEffect(() => {
@@ -135,13 +126,32 @@ export default function MusicPlayer() {
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (playing) {
-      audio.pause();
-      setPlaying(false);
+
+    if (playingIndex === activeIndex) {
+      // Same song — just toggle
+      if (playing) {
+        audio.pause();
+        setPlaying(false);
+      } else {
+        audio.play().catch(() => {});
+        setPlaying(true);
+      }
     } else {
+      // New song — load and play
       setMorePlaying(null);
-      audio.play().catch(() => {});
-      setPlaying(true);
+      audio.src = SONGS[activeIndex].file;
+      audio.load();
+      setCurrentTime(0);
+      setDuration(0);
+      setPlayingIndex(activeIndex);
+      audio.addEventListener(
+        "canplay",
+        () => {
+          audio.play().catch(() => {});
+          setPlaying(true);
+        },
+        { once: true },
+      );
     }
   };
 
@@ -187,32 +197,40 @@ export default function MusicPlayer() {
               {index === activeIndex && (
                 <div className="play-overlay">
                   <button
-                    className="play-btn"
-                    aria-label={playing ? "Pause" : "Play"}
+                    className={`play-btn${playing && playingIndex === activeIndex ? " playing" : ""}`}
+                    aria-label={
+                      playing && playingIndex === activeIndex ? "Pause" : "Play"
+                    }
                     onClick={(e) => {
                       e.stopPropagation();
                       togglePlay();
                     }}
                   >
-                    {playing ? <PauseIcon /> : <PlayIcon />}
+                    {playing && playingIndex === activeIndex ? (
+                      <PauseIcon />
+                    ) : (
+                      <PlayIcon />
+                    )}
                   </button>
-                  <input
-                    type="range"
-                    className="seek-bar"
-                    min={0}
-                    max={duration || 1}
-                    step={0.1}
-                    value={currentTime}
-                    style={{
-                      "--pct": `${duration ? (currentTime / duration) * 100 : 0}%`,
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => {
-                      const t = parseFloat(e.target.value);
-                      audioRef.current.currentTime = t;
-                      setCurrentTime(t);
-                    }}
-                  />
+                  {playingIndex === activeIndex && (
+                    <input
+                      type="range"
+                      className="seek-bar"
+                      min={0}
+                      max={duration || 1}
+                      step={0.1}
+                      value={currentTime}
+                      style={{
+                        "--pct": `${duration ? (currentTime / duration) * 100 : 0}%`,
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => {
+                        const t = parseFloat(e.target.value);
+                        audioRef.current.currentTime = t;
+                        setCurrentTime(t);
+                      }}
+                    />
+                  )}
                 </div>
               )}
             </div>

@@ -82,14 +82,28 @@ const PauseIcon = () => (
   </svg>
 );
 
+const ShareIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
+  </svg>
+);
+
+function getInitialSong() {
+  const p = new URLSearchParams(window.location.search).get("song");
+  const n = parseInt(p, 10);
+  return Number.isFinite(n) && n >= 0 && n < SONGS.length ? n : 4;
+}
+
 export default function MusicPlayer() {
-  const [activeIndex, setActiveIndex] = useState(4);
+  const [initialSong] = useState(getInitialSong);
+  const [activeIndex, setActiveIndex] = useState(initialSong);
   const [playingIndex, setPlayingIndex] = useState(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showMore, setShowMore] = useState(false);
   const [morePlaying, setMorePlaying] = useState(null);
+  const [copied, setCopied] = useState(false);
   const audioRef = useRef(null);
   const swiperRef = useRef(null);
 
@@ -155,6 +169,15 @@ export default function MusicPlayer() {
     }
   };
 
+  const handleShare = (index) => {
+    const url =
+      window.location.origin + window.location.pathname + "?song=" + index;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  };
+
   const toggleMoreSong = (song) => {
     if (audioRef.current && playing) {
       audioRef.current.pause();
@@ -171,7 +194,7 @@ export default function MusicPlayer() {
         centeredSlides
         slidesPerView="auto"
         loop
-        initialSlide={4}
+        initialSlide={initialSong}
         coverflowEffect={{
           rotate: 20,
           stretch: 0,
@@ -194,6 +217,18 @@ export default function MusicPlayer() {
               <img src={song.art} alt={song.title} className="album-art" />
               <div className="card-gradient" />
               <div className="card-title">{song.title}</div>
+              {index === activeIndex && (
+                <button
+                  className={`share-btn${copied ? " copied" : ""}`}
+                  aria-label="Share"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleShare(index);
+                  }}
+                >
+                  {copied ? "Copied!" : <ShareIcon />}
+                </button>
+              )}
               {index === activeIndex && (
                 <div className="play-overlay">
                   <button

@@ -157,6 +157,33 @@
   pointer-events: none;
 }
 
+.share-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 20px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: background 0.2s;
+}
+
+.share-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
 .play-overlay {
   position: absolute;
   inset: 0;

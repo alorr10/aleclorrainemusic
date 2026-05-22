@@ -85,6 +85,8 @@ const PauseIcon = () => (
 export default function MusicPlayer() {
   const [activeIndex, setActiveIndex] = useState(4);
   const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [showMore, setShowMore] = useState(false);
   const [morePlaying, setMorePlaying] = useState(null);
   const audioRef = useRef(null);
@@ -96,6 +98,8 @@ export default function MusicPlayer() {
     audio.src = SONGS[activeIndex].file;
     audio.load();
     setPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
   }, [activeIndex]);
 
   // Navigate side slides via document-level click, bypassing 3D hit-test issues with loop clones
@@ -192,6 +196,23 @@ export default function MusicPlayer() {
                   >
                     {playing ? <PauseIcon /> : <PlayIcon />}
                   </button>
+                  <input
+                    type="range"
+                    className="seek-bar"
+                    min={0}
+                    max={duration || 1}
+                    step={0.1}
+                    value={currentTime}
+                    style={{
+                      "--pct": `${duration ? (currentTime / duration) * 100 : 0}%`,
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => {
+                      const t = parseFloat(e.target.value);
+                      audioRef.current.currentTime = t;
+                      setCurrentTime(t);
+                    }}
+                  />
                 </div>
               )}
             </div>
@@ -199,7 +220,12 @@ export default function MusicPlayer() {
         ))}
       </Swiper>
 
-      <audio ref={audioRef} onEnded={() => setPlaying(false)} />
+      <audio
+        ref={audioRef}
+        onEnded={() => setPlaying(false)}
+        onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.target.duration)}
+      />
 
       <div className="more-container">
         <button className="more-btn" onClick={() => setShowMore((s) => !s)}>

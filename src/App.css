@@ -1,20 +1,319 @@
-.App {
+:root {
+  --orange: #ff6b35;
+  --pink: #ff3cac;
+  --white: #ffffff;
+  --white-dim: rgba(255, 255, 255, 0.65);
+}
+
+/* === APP SHELL === */
+
+.app {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.app-overlay {
+  min-height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 20px 72px;
+}
+
+/* === HEADER === */
+
+.app-header {
   text-align: center;
+  margin-bottom: 40px;
+  animation: fadeUp 0.7s ease both;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.app-title {
+  font-family: "Boogaloo", cursive;
+  font-size: clamp(2.8rem, 9vw, 5.5rem);
+  margin: 0 0 18px;
+  background: linear-gradient(
+    135deg,
+    #ffd580 0%,
+    var(--orange) 45%,
+    var(--pink) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  line-height: 1;
+  letter-spacing: 0.01em;
 }
 
-.App-title {
-  font-size: 1.5em;
+.spotify-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 26px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 100px;
+  color: var(--white);
+  text-decoration: none;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  transition:
+    background 0.2s,
+    transform 0.2s;
 }
 
-@media screen and (min-width: 992px) {
-  .carousel {
-    width: 50%;
+.spotify-link:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* === PLAYER === */
+
+.player {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeUp 0.7s 0.15s ease both;
+}
+
+/* === SWIPER === */
+
+.song-swiper {
+  width: 100%;
+  padding: 24px 0 48px !important;
+}
+
+.song-slide {
+  width: 280px !important;
+  height: 280px !important;
+}
+
+/* === SONG CARD === */
+
+.song-card {
+  width: 280px;
+  height: 280px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s;
+}
+
+.song-card.active {
+  cursor: pointer;
+}
+
+.album-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 45%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+  pointer-events: none;
+}
+
+.card-title {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  color: var(--white);
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.18);
+  transition: background 0.2s;
+}
+
+.song-card.active:hover .play-overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.play-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    background 0.15s;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.play-btn:hover {
+  transform: scale(1.08);
+  background: #ffffff;
+}
+
+.play-btn svg {
+  color: #1a1a1a;
+  margin-left: 3px;
+}
+
+.play-btn:has(path[d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"]) svg {
+  margin-left: 0;
+}
+
+/* Swiper nav arrows */
+.song-swiper .swiper-button-prev,
+.song-swiper .swiper-button-next {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  transition: background 0.2s;
+}
+
+.song-swiper .swiper-button-prev:hover,
+.song-swiper .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.song-swiper .swiper-button-prev::after,
+.song-swiper .swiper-button-next::after {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+/* === MORE SECTION === */
+
+.more-container {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.more-btn {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--white);
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 28px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+
+.more-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.more-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.more-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 20px;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--white);
+  font-family: "Nunito", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.more-item:hover {
+  background: rgba(255, 107, 53, 0.25);
+  border-color: rgba(255, 107, 53, 0.45);
+}
+
+.more-item.playing {
+  background: rgba(255, 60, 172, 0.25);
+  border-color: rgba(255, 60, 172, 0.55);
+}
+
+.more-icon {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  min-width: 14px;
+}
+
+.more-video {
+  margin-top: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* === ANIMATIONS === */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
